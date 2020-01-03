@@ -43,7 +43,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           icon: Icon(Icons.arrow_back),
                           onPressed: () {
                             discardChanges();
-                            // Navigator.of(context).pop();
                           }),
                       Text("Edit Profile",
                           style: TextStyle(

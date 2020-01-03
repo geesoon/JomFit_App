@@ -28,52 +28,66 @@ class _AccountPageState extends State<AccountPage> {
             padding: EdgeInsets.all(20.0),
             child: Column(
               children: <Widget>[
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("My Profile",
-                          style: TextStyle(
-                              fontSize: 30.0, fontWeight: FontWeight.bold)),
-                      SizedBox(height: 20.0),
-                      IconButton(
-                        icon: Icon(Icons.mode_edit,
-                            size: 30.0, color: Theme.of(context).primaryColor),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    EditProfilePage(profile: userprofile),
-                              ));
-                        },
-                      ),
-                    ]),
-                SizedBox(height: 20.0),
-                profileBuilder(),
-                Spacer(),
-                SizedBox(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: RaisedButton(
+                Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  Text("My Profile",
+                      style: TextStyle(
+                          fontSize: 30.0, fontWeight: FontWeight.bold)),
+                  // SizedBox(height: 20.0),
+                  Spacer(),
+                  IconButton(
+                      icon: Icon(Icons.mode_edit,
+                          size: 30.0, color: Theme.of(context).primaryColor),
                       onPressed: () {
-                        logout();
-                        HelperService().showToast("You're logout!");
-                        Navigator.pushReplacement(
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => LoginPage(),
+                              builder: (context) =>
+                                  EditProfilePage(profile: userprofile),
                             ));
-                      },
-                      child: new Text("LOGOUT"),
-                      textColor: Colors.white,
-                      color: Colors.redAccent,
-                      padding: EdgeInsets.all(15.0),
-                    ),
-                  ),
-                ),
+                      }),
+                  IconButton(
+                      icon: Icon(Icons.exit_to_app,
+                          size: 30.0, color: Theme.of(context).primaryColor),
+                      onPressed: () {
+                        logoutConfirmation();
+                      }),
+                ]),
+                SizedBox(height: 20.0),
+                profileBuilder(),
               ],
             )));
+  }
+
+  Future<void> logoutConfirmation() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm logout?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('Yes'),
+              onPressed: () {
+                logout();
+                HelperService().showToast("You're logout!");
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginPage(),
+                    ));
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget profileBuilder() {

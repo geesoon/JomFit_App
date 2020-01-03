@@ -75,7 +75,7 @@ class _SearchResultDetailPageState extends State<SearchResultDetailPage> {
                     setState(() {
                       booktext = "BOOKED";
                     });
-                    Navigator.pushReplacement(
+                    Navigator.pop(
                         context,
                         MaterialPageRoute(
                           builder: (context) => SearchPage(),

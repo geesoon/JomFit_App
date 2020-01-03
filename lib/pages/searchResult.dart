@@ -166,6 +166,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
   }
 
   Widget icon(String sports) {
+    print("Image icon: " + "$sports");
     if (sports == "Badminton") {
       return Expanded(
         child: Image.asset("assets/icons/badminton.png"),

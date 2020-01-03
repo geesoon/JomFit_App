@@ -1,17 +1,16 @@
-import 'package:jomfit/pages/guest/guestHome.dart';
 import 'package:jomfit/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:jomfit/services/helper-service.dart';
 import 'package:jomfit/services/loginAuth.dart';
 
-class LoginPage extends StatefulWidget {
+class GuestLoginPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return LoginPageState();
+    return GuestLoginPageState();
   }
 }
 
-class LoginPageState extends State<LoginPage> {
+class GuestLoginPageState extends State<GuestLoginPage> {
   Token token;
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -65,8 +64,6 @@ class LoginPageState extends State<LoginPage> {
               height: 20,
             ),
             submitButton(context),
-            SizedBox(height: 10),
-            guestButton(context),
           ],
         ),
       ),
@@ -208,30 +205,5 @@ class LoginPageState extends State<LoginPage> {
         },
       ),
     );
-  }
-
-  Widget guestButton(BuildContext context) {
-    return SizedBox(
-        width: double.infinity,
-        height: 50,
-        child: FlatButton(
-            // color: Colors.,
-            child: Text(
-              'Continue as guest',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MainGuestHomePage(
-                    email: 'guest',
-                  ),
-                ),
-              );
-            }));
   }
 }

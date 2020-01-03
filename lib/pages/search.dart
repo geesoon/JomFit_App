@@ -165,48 +165,6 @@ class _SearchPageState extends State<SearchPage> {
         });
   }
 
-  // Widget inputTime() {
-  //   String selectedTimeSlot = selectedTimeSlotList.join(" , ");
-  //   return TextFormField(
-  //     controller: time,
-  //     decoration: InputDecoration(
-  //       border: new OutlineInputBorder(
-  //         borderRadius: const BorderRadius.all(
-  //           const Radius.circular(20.0),
-  //         ),
-  //         borderSide: BorderSide(
-  //           width: 0,
-  //           style: BorderStyle.none,
-  //         ),
-  //       ),
-  //       prefixIcon: Icon(Icons.access_time, color: Colors.black),
-  //       hintText:
-  //           selectedTimeSlotList.isEmpty ? 'Select time' : selectedTimeSlot,
-  //       fillColor: Colors.white,
-  //       filled: true,
-  //       contentPadding: EdgeInsets.only(
-  //         top: 18.0,
-  //         right: 18.0,
-  //         bottom: 18.0,
-  //         left: 25.0,
-  //       ),
-  //       errorStyle: TextStyle(
-  //         color: Colors.black,
-  //       ),
-  //     ),
-  //     readOnly: true,
-  //     onTap: () => _showOptionDialog(),
-  //     validator: (String value) {
-  //       if (selectedTimeSlot.isEmpty) {
-  //         return 'Please select a time slot.';
-  //       } else {
-  //         time.text = selectedTimeSlot;
-  //         return null;
-  //       }
-  //     },
-  //   );
-  // }
-
   Widget inputCategory() {
     return TextFormField(
       decoration: InputDecoration(
@@ -294,7 +252,12 @@ class _SearchPageState extends State<SearchPage> {
               itemCount: snapshot.data.data.length,
               reverse: true,
               itemBuilder: (BuildContext context, int index) {
-                return bookingCard(snapshot.data, index, context);
+                if (snapshot.data.data.isNotEmpty) {
+                  return bookingCard(snapshot.data, index, context);
+                } else
+                  return Container(
+                    child: Text("No booking."),
+                  );
               },
             );
           else
@@ -319,14 +282,18 @@ class _SearchPageState extends State<SearchPage> {
               end: Alignment.bottomRight,
               colors: [
                 Colors.lightGreen[50],
-                Colors.blue,
+                Colors.redAccent,
               ])),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           ListTile(
-            leading: Icon(Icons.book, color: Colors.redAccent),
+            leading: new Image(
+              image: new AssetImage(icon(booking.data[index].sport)),
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.center,
+            ),
             title: Text(
               booking.data[index].sport,
               style: TextStyle(fontSize: 18.0),
@@ -353,6 +320,18 @@ class _SearchPageState extends State<SearchPage> {
         ],
       ),
     );
+  }
+
+  String icon(String sports) {
+    if (sports == "Badminton") {
+      return "assets/icons/badminton.png";
+    } else if (sports == "Futsal") {
+      return "assets/icons/futsal.png";
+    } else if (sports == "Gym") {
+      return "assets/icons/gym.png";
+    } else {
+      return "assets/icons/squash.png";
+    }
   }
 
   openDatePicker() async {
@@ -411,73 +390,3 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 }
-// List<String> selectedTimeSlotList = List();
-
-//   _showOptionDialog() {
-//     showDialog(
-//         context: context,
-//         builder: (BuildContext context) {
-//           //Here we will build the content of the dialog
-
-//           return AlertDialog(
-//             title: Text("Select time slot"),
-//             content: MultiSelectChip(
-//               timeSlot,
-//               onSelectionChanged: (selectedList) {
-//                 setState(() {
-//                   selectedTimeSlotList = selectedList;
-//                 });
-//               },
-//             ),
-//             actions: <Widget>[
-//               FlatButton(
-//                 child: Text("Select"),
-//                 onPressed: () => Navigator.of(context).pop(),
-//               )
-//             ],
-//           );
-//         });
-//   }
-// }
-
-// class MultiSelectChip extends StatefulWidget {
-//   final Function(List<String>) onSelectionChanged;
-
-//   MultiSelectChip(timeSlot, {this.onSelectionChanged});
-
-//   @override
-//   _MultiSelectChipState createState() => _MultiSelectChipState();
-// }
-
-// class _MultiSelectChipState extends State<MultiSelectChip> {
-//   List<String> selectedChoices = List();
-
-//   _buildChoiceList() {
-//     List<Widget> choices = List();
-
-//     timeSlot.forEach((item) {
-//       choices.add(Container(
-//         padding: const EdgeInsets.all(2.0),
-//         child: ChoiceChip(
-//           label: Text(item),
-//           selected: selectedChoices.contains(item),
-//           onSelected: (selected) {
-//             setState(() {
-//               selectedChoices.contains(item)
-//                   ? selectedChoices.remove(item)
-//                   : selectedChoices.add(item);
-//               widget.onSelectionChanged(selectedChoices);
-//             });
-//           },
-//         ),
-//       ));
-//     });
-//     return choices;
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Wrap(
-//       children: _buildChoiceList(),
-//     );
-//   }

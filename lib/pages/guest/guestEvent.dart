@@ -2,23 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:jomfit/pages/myappbar.dart';
 import 'package:jomfit/pages/myflexiableappbar.dart';
+import 'package:jomfit/services/fetchGuestEvent.dart';
 import 'package:jomfit/services/helper-service.dart';
-import 'package:jomfit/services/fetchEvent.dart';
-import 'package:jomfit/services/removeFav.dart';
-import 'package:jomfit/services/storeFav.dart';
 
-class EventPage extends StatefulWidget {
+class GuestEventPage extends StatefulWidget {
   @override
-  _EventPageState createState() => _EventPageState();
+  _GuestEventPageState createState() => _GuestEventPageState();
 }
 
-class _EventPageState extends State<EventPage> {
-  Future<Event> event;
+class _GuestEventPageState extends State<GuestEventPage> {
+  Future<GuestEvent> event;
 
   @override
   void initState() {
     super.initState();
-    event = fetchEvent();
+    event = fetchGuestEvent();
   }
 
   @override
@@ -69,7 +67,7 @@ class _EventPageState extends State<EventPage> {
   }
 
   Widget eventList() {
-    return FutureBuilder<Event>(
+    return FutureBuilder<GuestEvent>(
         future: event,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done)
@@ -93,7 +91,7 @@ class _EventPageState extends State<EventPage> {
         });
   }
 
-  Widget eventCard(Event events, int index) {
+  Widget eventCard(GuestEvent events, int index) {
     return Container(
         margin: EdgeInsets.all(20.0),
         decoration: BoxDecoration(
@@ -108,7 +106,7 @@ class _EventPageState extends State<EventPage> {
         child: eventCardContent(events, index));
   }
 
-  Widget eventCardContent(Event events, int index) {
+  Widget eventCardContent(GuestEvent events, int index) {
     String filename = events.data[index].filename;
     String url =
         "https://jomfitutm.000webhostapp.com/storage/uploads/" + "$filename";
@@ -157,48 +155,13 @@ class _EventPageState extends State<EventPage> {
                   )
                 ]),
           ),
-          Align(
-              alignment: Alignment.center,
-              child: IconButton(
-                  icon: (_isFavorite(events.data[index].isFavourite)
-                      ? Icon(Icons.favorite, color: Colors.red)
-                      : Icon(Icons.favorite_border, color: Colors.red)),
-                  iconSize: 25.0,
-                  onPressed: () {
-                    _toggleFavorite(events.data[index]);
-                  }))
         ],
       ),
     );
   }
 
-  bool _isFavorite(int isFavourite) {
-    if (isFavourite == 1)
-      return true;
-    else
-      return false;
-  }
-
-  void _toggleFavorite(Data event) {
-    setState(() {
-      if (event.isFavourite == 1) {
-        removeFav(event.id);
-        HelperService().showToast("Unfavorited!");
-        setState(() {
-          event.isFavourite = 0;
-        });
-      } else {
-        storeFav(event.id);
-        HelperService().showToast("Favorited!");
-        setState(() {
-          event.isFavourite = 1;
-        });
-      }
-    });
-  }
-
   Widget _buildEventDetailDialog(
-      BuildContext context, Event events, int index) {
+      BuildContext context, GuestEvent events, int index) {
     return new AlertDialog(
       title: Text(events.data[index].title),
       content: Column(

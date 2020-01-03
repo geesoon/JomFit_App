@@ -6,7 +6,7 @@ Future<StoreFavResponse> storeFav(int eventID) async {
   String token = await HelperService().getStringValuesSF("tokenValue");
 
   final response = await http.get(
-      'https://jomfitutm.000webhostapp.com/api/favourite' + "?event_id=" + "$eventID",
+      'https://jomfitutm.000webhostapp.com/api/favourite/store' + "?event_id=" + "$eventID",
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

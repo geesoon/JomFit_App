@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jomfit/pages/favoriteDetail.dart';
 import 'package:jomfit/services/fetchFav.dart';
-import 'package:jomfit/services/helper-service.dart';
-// import 'package:jomfit/services/removeFav.dart';
-import 'package:jomfit/services/storeFav.dart';
+import 'package:jomfit/services/removeFav.dart';
 
 class FavoritePage extends StatefulWidget {
   @override
@@ -25,11 +23,26 @@ class _FavoritePageState extends State<FavoritePage> {
         body: Container(
       padding: EdgeInsets.all(20.0),
       child: ListView(children: <Widget>[
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text("My Favourite",
-              textAlign: TextAlign.start,
-              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold)),
-        ]),
+        Column(
+          // alignment: WrapAlignment.start,
+          // crossAxisAlignment: WrapCrossAlignment.center,
+          children: <Widget>[
+            Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+              Text("My Favourite",
+                  style:
+                      TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold)),
+            ]),
+            SizedBox(height: 15.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text("Swipe right to remove",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(fontSize: 15.0)),
+              ],
+            ),
+          ],
+        ),
         SizedBox(height: 20.0),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -52,8 +65,46 @@ class _FavoritePageState extends State<FavoritePage> {
               physics: ClampingScrollPhysics(),
               itemCount: snapshot.data.data.length,
               itemBuilder: (BuildContext context, int index) {
-                print("Snapshot:" + snapshot.data.toString());
-                return favoriteCard(snapshot.data, index);
+                if (snapshot.data.data.isEmpty) {
+                  return Container(
+                    child: Text("No fav"),
+                  );
+                } else {
+                  return Dismissible(
+                      // Show a red background as the item is swiped away.
+                      background: Container(
+                        // color: Colors.,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                                padding: EdgeInsets.all(20.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.favorite_border,
+                                      color: Colors.red,
+                                      size: 40.0,
+                                    ),
+                                  ],
+                                )),
+                          ],
+                        ),
+                      ),
+                      direction: DismissDirection.startToEnd,
+                      key: Key(snapshot.data.data[index].title),
+                      onDismissed: (direction) {
+                        setState(() {
+                          removeFav(snapshot.data.data[index].id);
+                          snapshot.data.data.removeAt(index);
+                        });
+                        Scaffold.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                "${snapshot.data.data[index].title} event unfavourited.")));
+                      },
+                      child: favoriteCard(snapshot.data, index));
+                }
               },
             );
           else
@@ -62,7 +113,6 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 
   Widget favoriteCard(Favourite fav, int index) {
-    Icon icon = Icon(Icons.favorite, color: Colors.red);
     String filename = fav.data[index].filename;
     String url =
         "https://jomfitutm.000webhostapp.com/storage/uploads/" + "$filename";
@@ -83,7 +133,7 @@ class _FavoritePageState extends State<FavoritePage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Expanded(
-                    flex: 3,
+                    flex: 4,
                     child: Image.network(url),
                   ),
                   Expanded(
@@ -136,22 +186,14 @@ class _FavoritePageState extends State<FavoritePage> {
                       ],
                     ),
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: IconButton(
-                        icon: icon,
-                        iconSize: 25.0,
-                        onPressed: () {
-                          // _toggleFavorite();
-                          setState(() {
-                            var response = storeFav(fav.data[index].id);
-                            icon =
-                                Icon(Icons.favorite_border, color: Colors.red);
-                            print(response);
-                            HelperService().showToast("Favorited!");
-                          });
-                        }),
-                  ),
+                  // Expanded(
+                  //     flex: 2,
+                  //     child: IconButton(
+                  //         icon: Icon(Icons.favorite, color: Colors.red),
+                  //         iconSize: 25.0,
+                  //         onPressed: () {
+                  //           _unFavorite(fav.data[index]);
+                  //         })),
                 ])));
   }
 }

@@ -17,6 +17,8 @@ class BookingDetailPage extends StatefulWidget {
 }
 
 class _BookingDetailPageState extends State<BookingDetailPage> {
+  bool reload = false;
+
   @override
   Widget build(BuildContext context) {
     void updateBooking() {
@@ -110,8 +112,11 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async{
+        onPressed: () async {
           await confirmDelete();
+          setState(() {
+            reload = true;
+          });
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(

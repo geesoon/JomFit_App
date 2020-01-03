@@ -7,13 +7,13 @@ Future<CourtSlot> fetchSearchResult(
     String date, String sport, String venue) async {
   String token = await HelperService().getStringValuesSF("tokenValue");
   // print("CourtSlot header token:" + token);
-  // print('https://jomfitutm.000webhostapp.com/api/court' +
-  //     '?date=' +
-  //     '$date' +
-  //     '&sport=' +
-  //     '$sport' +
-  //     '&venue=' +
-  //     '$venue');
+  print('https://jomfitutm.000webhostapp.com/api/court' +
+      '?date=' +
+      '$date' +
+      '&sport=' +
+      '$sport' +
+      '&venue=' +
+      '$venue');
   final response = await http.get(
       'https://jomfitutm.000webhostapp.com/api/court' +
           '?date=' +
