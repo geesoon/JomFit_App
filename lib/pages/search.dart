@@ -63,7 +63,7 @@ class _SearchPageState extends State<SearchPage> {
         padding: EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 10.0),
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text("Booking",
+          Text("Search",
               textAlign: TextAlign.start,
               style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold)),
         ]));
@@ -252,12 +252,7 @@ class _SearchPageState extends State<SearchPage> {
               itemCount: snapshot.data.data.length,
               reverse: true,
               itemBuilder: (BuildContext context, int index) {
-                if (snapshot.data.data.isNotEmpty) {
-                  return bookingCard(snapshot.data, index, context);
-                } else
-                  return Container(
-                    child: Text("No booking."),
-                  );
+                return bookingCard(snapshot.data, index, context);
               },
             );
           else
